@@ -15,10 +15,10 @@ type TaskController struct {
 }
 
 // get task by user
-func (c *TaskController) GetTasks(w http.ResponseWriter, r *http.Request) {
-	userID := r.Context().Value("user_id").(int) // get el user_id from context
+func (controller *TaskController) GetTasks(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value("user_id").(int) // get user_id from context
 
-	tasks, err := c.TaskService.GetTasksByUserID(userID)
+	tasks, err := controller.TaskService.GetTasksByUserID(userID)
 	if err != nil {
 		http.Error(w, "failed to get task", http.StatusInternalServerError)
 		return
@@ -29,7 +29,7 @@ func (c *TaskController) GetTasks(w http.ResponseWriter, r *http.Request) {
 }
 
 // create task by user
-func (c *TaskController) CreateTask(w http.ResponseWriter, r *http.Request) {
+func (controller *TaskController) CreateTask(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value("user_id").(int) // get el user_id from context
 
 	var task models.Task
@@ -40,7 +40,7 @@ func (c *TaskController) CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	task.UserID = userID
-	err = c.TaskService.CreateTask(&task)
+	err = controller.TaskService.CreateTask(&task)
 	if err != nil {
 		http.Error(w, "Error creating task", http.StatusInternalServerError)
 		return
@@ -50,7 +50,7 @@ func (c *TaskController) CreateTask(w http.ResponseWriter, r *http.Request) {
 }
 
 // update task by user
-func (c *TaskController) UpdateTask(w http.ResponseWriter, r *http.Request) {
+func (controller *TaskController) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value("user_id").(int) // get el user_id from context
 	taskID, _ := strconv.Atoi(mux.Vars(r)["id"])
 
@@ -63,7 +63,7 @@ func (c *TaskController) UpdateTask(w http.ResponseWriter, r *http.Request) {
 
 	task.ID = taskID
 	task.UserID = userID
-	err = c.TaskService.UpdateTask(&task)
+	err = controller.TaskService.UpdateTask(&task)
 	if err != nil {
 		http.Error(w, "failed to update the task", http.StatusInternalServerError)
 		return
@@ -72,12 +72,12 @@ func (c *TaskController) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// Eliminar tarea
-func (c *TaskController) DeleteTask(w http.ResponseWriter, r *http.Request) {
+// remove task
+func (controller *TaskController) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value("user_id").(int) // get el user_id from context
 	taskID, _ := strconv.Atoi(mux.Vars(r)["id"])
 
-	err := c.TaskService.DeleteTask(taskID, userID)
+	err := controller.TaskService.DeleteTask(taskID, userID)
 	if err != nil {
 		http.Error(w, "failed to remove the task", http.StatusInternalServerError)
 		return

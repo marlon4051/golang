@@ -11,7 +11,7 @@ type TaskRepository struct {
 
 // get task by user_id
 func (r *TaskRepository) GetTasksByUserID(userID int) ([]models.Task, error) {
-	query := "SELECT id, title, description, status FROM tasks WHERE user_id = ?"
+	query := "SELECT id, user_id, title, description, status FROM tasks WHERE user_id = ?"
 	rows, err := r.DB.Query(query, userID)
 	if err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func (r *TaskRepository) GetTasksByUserID(userID int) ([]models.Task, error) {
 	var tasks []models.Task
 	for rows.Next() {
 		var task models.Task
-		err := rows.Scan(&task.ID, &task.Title, &task.Description, &task.Status)
+		err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status)
 		if err != nil {
 			return nil, err
 		}
