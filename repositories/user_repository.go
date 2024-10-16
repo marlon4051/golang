@@ -18,7 +18,7 @@ func (r *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	err := row.Scan(&user.ID, &user.UserName, &user.Email, &user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil // No existe usuario con ese email
+			return nil, nil
 		}
 		return nil, err
 	}
