@@ -7,11 +7,18 @@ import (
 	"task-api/models"
 	"task-api/services"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 )
 
 type TaskController struct {
 	TaskService *services.TaskService
+}
+
+var validate *validator.Validate
+
+func init() {
+	validate = validator.New()
 }
 
 // get task by user
@@ -35,11 +42,17 @@ func (controller *TaskController) CreateTask(w http.ResponseWriter, r *http.Requ
 	var task models.Task
 	err := json.NewDecoder(r.Body).Decode(&task)
 	if err != nil {
-		http.Error(w, "Bad data", http.StatusBadRequest)
+		http.Error(w, "Invalid input", http.StatusBadRequest)
 		return
 	}
 
 	task.UserID = userID
+
+	validationErr := validate.Struct(task)
+	if validationErr != nil {
+		http.Error(w, validationErr.Error(), http.StatusBadRequest)
+		return
+	}
 	err = controller.TaskService.CreateTask(&task)
 	if err != nil {
 		http.Error(w, "Error creating task", http.StatusInternalServerError)
@@ -63,6 +76,11 @@ func (controller *TaskController) UpdateTask(w http.ResponseWriter, r *http.Requ
 
 	task.ID = taskID
 	task.UserID = userID
+	validationErr := validate.Struct(task)
+	if validationErr != nil {
+		http.Error(w, validationErr.Error(), http.StatusBadRequest)
+		return
+	}
 	err = controller.TaskService.UpdateTask(&task)
 	if err != nil {
 		http.Error(w, "failed to update the task", http.StatusInternalServerError)
