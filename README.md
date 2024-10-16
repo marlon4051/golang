@@ -10,6 +10,19 @@
 - **MySQL**: Version 8.0.40  
   Download from: [MySQL Installer](https://dev.mysql.com/downloads/installer/)
 
+## Getting Started
+Follow these steps to set up and run the project locally:
+
+Clone the repository:
+
+```sh
+git clone https://github.com/marlon4051/task-api
+```
+Navigate to the project directory:
+```sh
+cd task-api
+```
+
 ### Installation Steps
 
 1. **Install Go**: Follow the instructions on the Go website to install Go on your machine.
