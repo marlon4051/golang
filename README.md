@@ -10,7 +10,7 @@
 - **MySQL**: Version 8.0.40  
   Download from: [MySQL Installer](https://dev.mysql.com/downloads/installer/)
 
-## Getting Started
+## Cloning Repository
 Follow these steps to set up and run the project locally:
 
 Clone the repository:
